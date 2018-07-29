@@ -1,0 +1,49 @@
+h5 {
+    margin-bottom: -20px;
+}
+
+.nested-table {
+    border: none;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+.table-container {
+    border: 2px solid #f2f2f2;
+    padding: 0 0 0 0;
+}
+
+.option-table {
+    table-layout: fixed;
+}
+.option-table td {
+    width: 33%;
+}
+
+.nested-table td, tr {
+    border: none;
+}
+
+.ng-repeat-table thead tr {
+    background-color: #e8e8e8;
+}
+
+.ng-repeat-table tbody tr:hover {
+    background-color: #e8e8e8;
+}
+
+.nested-table tbody tr:hover {
+    background-color: #d9d9d9;
+}
+
+#mainSvg #heatmap {
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+.option-table button {
+    width: 100%;
+}
+
+input[type="text"] { display: inline;}

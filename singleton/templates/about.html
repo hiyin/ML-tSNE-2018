@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singleton by WEHI5</title>
+<link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+
+<script src="js/default.js" type="text/javascript"></script>
+<script src="js/temp.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="top"></div>
+
+<!-- Navigation Menu -->
+<div id="nav-menu" class = "nav-menu">
+	<ul>
+		<li id="logo"><a href="{{ request.application_url + '/'}}"><img src ="{{ request.static_url('singleton:static/img/logo.png')}}" width="100%" height="auto"></a></li>
+		<li class=""><a href="{{ request.application_url + '/'}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+		<li class=""><a href="{{ request.application_url + '/features'}}"><i class="fa fa-star" aria-hidden="true"></i>Features</a></li>
+		<li class="active"><a href="{{ request.application_url + '/about'}}"><i class="fa fa-info" aria-hidden="true"></i>About</a></li>
+		<li class=""><a href="{{ request.application_url + '/contact'}}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact</a></li>
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url}}/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+    {% else %}
+		<li class=""><a href="{{ request.application_url }}/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Login/Signup</a></li>
+    {% endif %}
+	</ul>
+</div>
+<!-- Navigation Menu END -->
+
+<!-- Scroll to top -->
+<div class = "to-top">
+<button onclick="scrollToTop(1000);"><i class="fa fa-angle-up"></i></button>
+</div>
+<!-- Scroll to top END -->
+
+<!-- Content -->
+<div id="content" class="container">
+
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url }}/dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i>You are logged in, enter Dashboard »</a></li>
+    {% endif %}
+
+<h1>About</h1>
+<i>Adapted from Project Assignment Proposal Report</i>
+    <hr>
+<h2>Situational Assessment and Problem Statement</h2>
+<details><summary>In 2011, the National Institutes of Health (NIH) launched the Single Cell Analysis Program to advance the finding, development and transformation of novel approaches to single cell analysis with implications in personalized medicine that target human disease at the single cell level.</summary><p>Single cell analysis is rapidly revolutionizing cancer research, affecting many disciplines including medicine, systems biology, electrochemical engineering and material science. Next-generation sequencing technologies have given rise to new "omics" techniques, such as transcriptomics (study of gene expressions in a given cell population).
+These techniques have been increasingly directed to understanding the dynamic changes that occur in individual cells in natural or perturbed states (perturbations induced by e.g. a drug, infectious agent or mechanical forces). Insights from this process help researchers in tackling complex and longstanding biomedical problems. 
+In the past, cells from the same population were considered to be homogeneous. However, recent research (enabled by sequencing and new "omics" techniques) reveals that heterogeneity exists – genetic differences – within a cell population. Variations in gene expression among individual cells are critical to resolving previously irresolvable questions not only in cancer research, where detection of rare cell types in tumor progression is of supreme concern, but also in stem cell research, metagenomics, immunology, neurology, reproductive health and drug discovery.
+When analysing single cell data, scientists in biomedical research institutes, clinical hospitals and biopharmaceutical companies are currently facing the following difficulties, i.e. there is no golden standard workflow analysis workflow for single cell data; no sound quality control when pre-processing the data to eliminate technical and biological noise; to obtain reliable data, and no well replicable statistical methods for clustering of single cells gene expression profiles to find heterogeneity within a cell population. 
+Finally and most importantly, there is no existing technology to effectively visualise processed single cell data in real time with interactivity.
+Currently, there is no open source web application focusing on robust, real time and interactive visualization and analysis of single cell gene expression data. Given the critical nature of this research, we see a significant unmet need for such an application, aimed directly at bench scientists wanting to perform "one-click" visualization and analysis of single cell gene expression data. Therefore, Singleton will be designed and implemented to fulfill the needs of various stakeholders.
+Stakeholders that may have an interest in Singleton are wide and varied. The primary stakeholders are biological and medical research organisations, such as the Walter and Eliza Hall Institute of Medical Research (WEHI), who instigated the development of Singleton (see "Solution Overview" below). Further stakeholders would include higher education institutes, hospitals and businesses in the medical field. Applications like Singleton also would be of interest to the general public, as it would be used to shape medical treatment that is used throughout the world.</p>
+</details>
+<h2>Solution Overview</h2>
+<details><summary>Our team will work together with Dr. Jarny Choi, a researcher from Prof. Doug Hilton’s lab in Molecular Medicine Division at WEHI, to rapidly develop an application which meets the needs of real biologists. Given the limited scope of a semester-long project, we will focus on implementing one visualisation (t-SNE clustering) and one analysis tool (lasso selection to analyse differentially expressed genes), along with cloud storage for single cell datasets, export and reporting functionality.</summary>
+<p>We believe that this core functionality will provide real benefit to researchers, while representing an achievable amount of engineering work. The product will be open-source, so that it can be extended as easily as possible by other developers after our project finishes.
+Dr. Choi will act as a de-facto client, despite WEHI not having a financial stake in the project. He will be our key point-of-contact for requirements analysis, provision of sample data, and app testing.
+The size of our team means that we must be careful to co-ordinate our activities to avoid overlap. Nevertheless, the greater numbers may be an advantage in that it provides some capacity for pair programming. 
+All of this will be co-ordinated by Angela, as the project and team manager. Front-end work, including UI and UX design, will mostly be owned by Josh, Evan and Kimberley. Angela, Liam, Evan and Yosh will collaborate on back-end functionality, with Evan and Angela concentrating on database design and data modelling, Yosh and Angela focusing on data analysis including possible interfacing with R, and Liam and Yosh using their web-development experience to support development across the full spectrum of the back-end.</p>
+</details>
+<h2>Cost-Benefit Analysis</h2>
+<details><summary>There is no doubt that bioinformaticians and biologists need a range of tools for rapidly visualising and interrogating the large datasets generated by high-throughput sequencing. Existing platforms like Galaxy and Genestack represent "swiss-army knife" solutions that provide a wide range of features at the cost of simplicity, flexibility and speed.</summary><p>If researchers are limited to using these slower and less-focused tools, they squander their time and by implication their hard-won funding. Singleton will reduce the friction of data management, allowing researchers to generate visualisations extremely quickly, and reach insights faster.
+If Singleton is not implemented now, it is probable that products offering similar functionality would eventually spring up – the demand is only going to grow as single cell analysis becomes more widespread. However, there is no certainty that other products will be open-source, or that they will place the same emphasis on single cell data.
+Ultimately, any delay in the implementation of this tool represents a missed opportunity to help accelerate our understanding of cancer, immune disorders, and any number of other critical health challenges.</p>
+</details>
+
+</div>
+<!-- Content END-->
+
+<!-- Footer -->
+<div id ="footer">
+  <center><p>&copy; WEHI5 2016</p>
+  <p><i>This is a project of Web Information Technologies of year 2016 at University of Melbourne.</i></p>
+  <p>Affiliations: <img src="{{ request.static_url('singleton:static/img/wehi.png')}}" width="250px"><img src="{{ request.static_url('singleton:static/img/uom.png')}}" width="250px"></p>
+  </center>
+ </div>
+<!-- Footer END -->
+
+</body>
+</html>

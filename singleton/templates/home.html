@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singleton by WEHI5</title>
+<link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ request.static_url('singleton:static/css/carousel.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+<script src="{{ request.static_url('singleton:static/js/default.js') }}" type="text/javascript"></script>
+
+</head>
+
+<body onload = "getJSON()">
+<div id="top"></div>
+
+<!-- Navigation Menu -->
+<div id="nav-menu" class = "nav-menu">
+	<ul>
+		<li id="logo"><a href="{{ request.application_url + '/'}}"><img src ="{{ request.static_url('singleton:static/img/logo.png')}}" width="100%" height="auto"></a></li>
+		<li class="active"><a href="{{ request.application_url + '/'}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+		<li class=""><a href="{{ request.application_url + '/features'}}"><i class="fa fa-star" aria-hidden="true"></i>Features</a></li>
+		<li class=""><a href="{{ request.application_url + '/about'}}"><i class="fa fa-info" aria-hidden="true"></i>About</a></li>
+		<li class=""><a href="{{ request.application_url + '/contact'}}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact</a></li>
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url}}/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+    {% else %}
+		<li class=""><a href="{{ request.application_url }}/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Login/Signup</a></li>
+    {% endif %}
+	</ul>
+</div>
+<!-- Navigation Menu END -->
+
+<!-- Scroll to top -->
+<div class = "to-top">
+<button onclick="scrollToTop(1000);"><i class="fa fa-angle-up"></i></button>
+</div>
+<!-- Scroll to top END -->
+
+<!-- Content -->
+
+<div id="content" class="container">
+
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url }}/dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i>You are logged in, enter Dashboard »</a></li>
+    {% endif %}
+
+<h1>Singleton</h1>
+<p><b>Singleton</b> is an intuitive tool enabling biomedical researchers to visualise and 
+analyse single cell gene expression data. Users can upload datasets onto the server, use 
+interactive cluster visualisations to extract useful gene information from the data, 
+then save or export their analysis in various formats. This analysis can then be used in 
+downstream applications in clinical health decision-making and translational discovery to 
+combat human diseases. </p>
+
+<!-- Carousel -->
+<button type="button" onclick ="moreSlides()">More Slides</button>
+<select name = "img_type" id ="img_type" onchange = "getJSON()">
+    <option value = "" selected = "selected">All Types</option>
+    <option value = "cell">Cells</option>
+    <option value = "tsne">t-SNE clusters</option>
+    <option value = "hmap">Heatmaps</option>
+</select>
+
+<div id = "car-wrap">
+	<span class = "car-nav nav-left car-ban-left"><i class="fa fa-arrow-left"></i></span>
+	<div id = "carousel">
+	<ul id ="car-slides">
+	</ul>
+	</div>
+	<span class = "car-nav nav-right car-ban-right"><i class="fa fa-arrow-right"></i></span>
+<ul id = "car-nav-pos"></ul>
+</div>
+<!-- Carousel END -->
+
+</div>
+<!-- Content END-->
+
+<!-- Carousel Script -->
+<script type="application/javascript">
+var CAROUSEL = {}; // object
+
+var CAROUSEL_num = 0;
+var CAROUSEL_timer;
+var CAROUSEL_pause = false;
+
+var CAROUSEL_slides_list = document.getElementsByClassName('car-slide');
+var CAROUSEL_slides = [];
+
+var CAROUSEL_positions_list;
+var CAROUSEL_positions = [];
+var CAROUSEL_position = 0;
+CAROUSEL_position_of = function(obj) { // Get position of active slide
+  var all_children = this.parentNode.childNodes;
+  var index = 0;
+  for (var i = 0; i < all_children.length; i++) {
+    index = i;
+    if (this === all_children[i]) {
+      break;
+    }
+  }
+  CAROUSEL_position = index;
+  CAROUSEL_change('manual');
+};
+
+var frontIndex = 0;
+var theta = 0;
+
+function resetCarousel() {
+  document.getElementById("car-nav-pos").innerHTML = '';
+  CAROUSEL = {}; // object
+
+  CAROUSEL_num = 0;
+  CAROUSEL_timer;
+  CAROUSEL_timer = false;
+
+  CAROUSEL_slides_list = document.getElementsByClassName('car-slide');
+  CAROUSEL_slides = [];
+
+  CAROUSEL_positions_list;
+  CAROUSEL_positions = [];
+  CAROUSEL_position = 0;
+  CAROUSEL_position_of = function(obj) { // Get position of active slide
+  all_children = this.parentNode.childNodes;
+  index = 0;
+  for (var i = 0; i < all_children.length; i++) {
+    index = i;
+    if (this === all_children[i]) {
+      break;
+    }
+  }
+  CAROUSEL_position = index;
+  CAROUSEL_change('manual');
+};
+
+frontIndex = 0;
+theta = 0;
+
+};
+
+// Rotates carousel
+CAROUSEL_change = function(value) {
+  CAROUSEL_slides[CAROUSEL_num].className = CAROUSEL_slides[CAROUSEL_num].className.replace(/(?:^|\s)active(?!\S)/g,'');
+  CAROUSEL_positions[CAROUSEL_num].className = '';
+  if (CAROUSEL_num + value > CAROUSEL_slides.length - 1) {
+    CAROUSEL_num = 0;
+  } else if (CAROUSEL_num + value < 0) {
+    CAROUSEL_num = CAROUSEL_slides.length - 1;
+  } else if (value === 'manual') {
+    CAROUSEL_num = CAROUSEL_position;
+  } else {
+    CAROUSEL_num += value;
+  }
+  CAROUSEL_slides[CAROUSEL_num].className += ' active';
+  CAROUSEL_positions[CAROUSEL_num].className = 'active';
+  var num = CAROUSEL_positions.length;
+  var radius = Math.ceil(640 / 2 / Math.tan(Math.PI / num));
+  frontIndex = (frontIndex - value + num) % num;
+  theta = (theta + (-value) * (360 / num));
+  var css = 'perspective(1100px) translateZ(-' + radius + 'px) rotateY(' + theta + 'deg)';
+  carousel.style.transform = css;
+};
+
+// Initialize carousel
+function CAROUSEL_init() {
+  resetCarousel();
+  for (var i = 0; i < CAROUSEL_slides_list.length; i++) {
+    CAROUSEL_slides[i] = CAROUSEL_slides_list[i];
+    document.getElementById('car-nav-pos').appendChild(document.createElement('li'));
+  }
+  CAROUSEL_slides[0].className += ' active';
+  CAROUSEL_positions_list = document.getElementById('car-nav-pos').children;
+  for (var i = 0; i < CAROUSEL_slides.length; i++) {
+    CAROUSEL_positions[i] = CAROUSEL_positions_list[i];
+  }
+  CAROUSEL_positions[0].className = ' active';
+  CAROUSEL_timer = setInterval(function() {
+    if(!CAROUSEL_pause) {
+      CAROUSEL_change(1);
+    }
+  }, 5000);
+  document.getElementById('car-wrap').onmouseover = function() {
+    CAROUSEL_pause = true;
+  };
+  document.getElementById('car-wrap').onmouseout = function() {
+    CAROUSEL_pause = false;
+  };
+  document.getElementsByClassName('car-ban-left')[0].onmousedown = function() {
+    CAROUSEL_change(-1)};
+  document.getElementsByClassName('car-ban-right')[0].onmousedown = function() {
+    CAROUSEL_change(1)};
+  document.onkeydown = function (e) {
+    if (e.which == 37) { // If left arrow on keyboard is pressed
+      CAROUSEL_change(-1); }
+    if (e.which == 39) { // If right arrow on keyboard is pressed
+      CAROUSEL_change(1); }
+    };
+};
+
+// Filter JSON object
+function filterSlides(JSONobj) {
+  var dropdown = document.getElementById("img_type");
+  var criteria = dropdown.options[dropdown.selectedIndex].value;
+  var slidesList = {};
+  var slides = [];
+  for (var i = 0; i < JSONobj.slides.length; i++) {
+    var slide = JSONobj.slides[i];
+    if (criteria == "") { // If all types
+      slides.push(slide);
+    }
+    else { // If select type
+      if (criteria == slide["type"]) {
+        slides.push(slide);
+      }
+    }
+  };
+  slidesList.slides = slides;
+  return slidesList; // Return filtered slidesList
+};
+
+var j = 0; // start slice index
+var k = 5; // end slice index
+var l = 5; // num of slides per page
+var g_slides;
+
+// Add slides into HTML body
+function addSlides(filtered) {
+  g_slides = filtered;
+  document.getElementById("car-slides").innerHTML = ""; // Clears ul
+  if (filtered.slides.length < 5) { // If there are less than 5 slides
+    k = filtered.slides.length}
+  var fslides = filtered.slides.slice(j,k); // Slice 5 slides;
+  for (var i = 0; i < fslides.length; i++) {
+    var ul = document.getElementById("car-slides");
+    var li = document.createElement("li");
+    li.setAttribute("class", "car-slide");
+    var li_text = "";
+    li_text = "<a href='" + fslides[i]["url"] + "'>";
+    li_text += "<figure class = 'car-img-frame'><img src = '{{ request.static_url('singleton:static/img') }}/" + fslides[i]["image"] + "' alt = '" + fslides[i]["name"] + "'/>";
+    li_text += "<figcaption class = 'car-img-info'>" + "<h2>" + fslides[i]["type"] + "</h2><h3>" + fslides[i]["name"] + "</h3></figcaption></figure></a>";
+    li.innerHTML = li_text;
+    ul.appendChild(li);
+  }
+};
+
+function moreSlides() { // Add more slides when button is pressed
+  j += l;
+  k += l;
+  if (k > g_slides.slides.length) { // Stop adding if already ends
+    alert('End of slides');
+    return;
+  }
+  else {
+    var slides = g_slides.slides.slice(j,k);
+    for (var i = 0; i < slides.length; i++) {
+      var ul = document.getElementById("car-slides");
+      var li = document.createElement("li");
+      li.setAttribute("class", "car-slide");
+      var li_text = "";
+      li_text = "<a href='" + slides[i]["url"] + "'>";
+      li_text += "<figure class = 'car-img-frame'><img src = '{{ request.static_url('singleton:static/img') }}/" + slides[i]["image"] + "' alt = '" + slides[i]["name"] + "'/>";
+      li_text += "<figcaption class = 'car-img-info'>" + "<h2>" + slides[i]["type"] + "</h2><h3>" + slides[i]["name"] + "</h3></figcaption></figure></a>";
+      li.innerHTML = li_text;
+      ul.appendChild(li);
+    }
+   }
+   styleSlides();
+   CAROUSEL_init();
+};
+
+// 3D transform slides
+styleSlides = function() {
+ var carousel = document.getElementById("carousel");
+ carousel.style.transform = "perspective(1100px) translateZ(-" + radius + "px)";
+ var slidesList = document.getElementById("car-slides");
+ var num = slidesList.children.length;
+ for (i = 1; i < num + 1; i++) {
+   var selector = ".car-slide:nth-child(" + i + ")";
+   var slide = document.querySelector(selector);
+   var rotate = (i-1) * 360 / num;
+   var radius = Math.ceil(640 / 2 / Math.tan(Math.PI / num));
+   var csstrans = "rotateY(" + rotate + "deg) translateZ(" + radius + "px)";
+   slide.style.transform = csstrans;
+ }
+};
+
+// Get data from file
+function getJSON() {
+    var data = "{{ request.static_url('singleton:static/temp/slides.json') }}";
+    var xhr = new XMLHttpRequest();
+    xhr.overrideMimeType("application/json");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        j = 0; // reset slices index
+        k = 5;
+        var jsonObj = JSON.parse(xhr.responseText);
+        var filtered = filterSlides(jsonObj); 
+        addSlides(filtered); // Add slides into body as HTML
+        styleSlides(); // 3D transform slides
+        CAROUSEL_init(); // Starts carousel
+      }
+    };
+    xhr.open('get', data, true);
+    xhr.send();
+}
+
+</script>
+
+<!-- Carousel Script END -->
+
+<!-- Footer -->
+<div id ="footer" class="container-fluid" style="color: #173e43; background-color: #fae596;">
+  <center><p>&copy; WEHI5 2016</p>
+  <p><i>This is a project of Web Information Technologies of year 2016 at University of Melbourne.</i></p>
+  <p>Affiliations: <img src="{{ request.static_url('singleton:static/img/wehi.png')}}" width="250px"><img src="{{ request.static_url('singleton:static/img/uom.png')}}" width="250px"></p>
+  </center>
+ </div>
+<!-- Footer END -->
+
+</body>
+</html>

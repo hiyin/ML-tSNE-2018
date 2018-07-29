@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ng-app="singleton">
+<head>
+<title>Singleton - tsne example</title>
+
+<script type="text/javascript" src="angular.js"></script>
+<script type="text/javascript" src="d3.v3.min.js"></script>	
+<script type="text/javascript" src="tsne.js"></script>
+<script type="text/javascript" src="scatterplot.js"></script>
+
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+var app = angular.module('singleton',[]);
+
+app.controller('MainController', function ($scope, $interval) {
+	var distances = [[1,0.8,0.2,0.5],[0.8,1,0.7,0.7],[0.2,0.7,1,0.3],[0.5,0.7,0.3,1]];	// array of distances (symmetric)
+	var names = ['a','b','c','d']; // array of names, same length as an element of distances
+	
+	// tsne parameters
+	$scope.tsneInfoDisplay = 'iteration: 0, cost:0';
+	$scope.tsneLearningRate = 5;
+	$scope.tsnePerplexity = 2;
+	var maxIteration = 500;
+	var keepRunning = true;
+	var intervalId = -1;	// for setInterval method used by tsne clustering
+
+	// Other variables used by the controller
+	var scatterPlot = new scatterplot.ScatterPlot({'svg':d3.select("#mainSvg"), 'showLabels':true, 'hideOverlappingLabels':true});		   
+
+	// Stops tsne clustering run
+	$scope.stopTsne = function()
+	{
+		keepRunning = false;
+		$interval.cancel(intervalId);
+		//clearInterval(intervalId);
+	}
+	
+	// Main plot function
+	$scope.plot = function()
+	{
+		var tsne;
+		var tx=0, ty=0;
+		var ss=1;
+	
+		// data for scatterPlot
+		var data = [];
+		for (var i=0; i<distances.length; i++)
+			data.push({'name':names[i], 'x':0, 'y':0, 
+					   'colour':'#ccc'});
+		
+		function step() 
+		{
+			if(keepRunning) {
+				var cost = tsne.step(); // do a few steps
+				$scope.tsneInfoDisplay = "iteration: " + tsne.iter + ", cost: " + cost.toFixed(2);
+				if (tsne.iter>maxIteration) $scope.stopTsne();
+			}
+
+			// get current solution
+			var Y = tsne.getSolution();
+	  
+			// update the plot
+			for (var i=0; i<data.length; i++) {
+				data[i]['x'] = Y[i][0];
+				data[i]['y'] = Y[i][1];
+			}
+			scatterPlot.draw(data);				
+		}
+
+		keepRunning = true;
+		tsne = new tsnejs.tSNE({epsilon: parseFloat($scope.tsneLearningRate), 
+								perplexity: parseInt($scope.tsnePerplexity), 
+								dim: data.length}); // create a tSNE instance
+		tsne.initDataDist(distances);
+	
+		scatterPlot.draw(data);
+	
+		// Repeat run at regular intervals (milliseconds). 
+		// Using angular's $interval wrapper means no need for $scope.$apply for $scope variables
+		intervalId = $interval(step, 100);
+	}
+	
+});
+
+</script>
+</head>
+
+<body>
+<div id="wrap">      
+	<div id="content">
+		<div style="margin-left:40px; margin-right:40px;" ng-controller="MainController">
+			<table width="100%">
+			<tr>
+				<td>
+					t-sne example plot &nbsp;
+					<button ng-click="plot()">run</button>
+					<button ng-click="stopTsne()">stop</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style="margin-top:10px;">
+						learning rate: <input type="text" ng-model="tsneLearningRate" size="2">&nbsp;
+						perplexity: <input type="text" ng-model="tsnePerplexity" size="2">&nbsp;
+						<span>{{tsneInfoDisplay}}</span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><svg id="mainSvg" width="800" height="500"></svg></td>
+			</tr>
+			</table>
+		</div>
+		<br style="clear:both;" />
+	</div> <!-- content -->
+	
+</div>
+    
+</body>
+</html>

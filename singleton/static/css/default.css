@@ -1,0 +1,366 @@
+html, body {
+    height: 100%;
+	/* The html and body elements cannot have any padding or margin. */
+	-webkit-font-smoothing: antialiased;
+	font: normal 100% arial,sans-serif;
+}
+
+html {
+	position: relative;
+}
+
+body{
+	margin:0;
+	padding:0;
+	width:100%;
+	max-width:100%;
+	overflow-x: hidden;
+}
+
+/** Navigation Menu**/
+.nav-menu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	z-index: 9999;
+	background-color: #fff;
+	color: #555;
+	-moz-box-shadow: 0px 4px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0px 4px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 4px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+}
+
+#logo {
+	background-color: #fff;
+	border: none;
+}
+
+#logo:hover {
+	background-color: #fff;
+	border: none;
+}
+
+.sticky {
+	line-height: 20px;
+	font-size: 14pt;
+	transition: all 0.4s ease;
+}
+
+.nav-menu ul {
+  width: 100%;
+  display: inline-table;
+  table-layout: fixed;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-menu ul li {
+  display: table-cell;
+  width: auto;
+  text-align: center;
+  margin: 0;
+  padding: 15px;
+  border-right: 1px solid #999;
+  border-left: 1px solid #999;
+  vertical-align: middle;
+  font-size: 1.2rem;
+  font-family: 'Century Gothic', Helvetica, sans-serif;
+}
+
+.nav-menu a {
+	display: inline-block;
+	width:100%;
+	color: #555;
+	text-decoration: none;
+}
+
+.nav-menu a:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.nav-menu .active {
+	color: #000;
+	text-transform: uppercase;
+	border-bottom: 5px solid #348aa7;
+}
+
+.nav-menu ul li:hover {
+	background-color: #fae596;
+	border-bottom: 5px solid #348aa7;
+}
+
+.nav-menu .fa {
+	display: block;
+	color: #555;
+}
+
+.nav-menu .fa:hover {
+	color: #000;
+}
+
+/** To Top **/
+.to-top {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 5px;
+  width: 100%;
+  overflow: hidden;
+  color: #348aa7;
+  text-align: center;
+  font-size: 12px;
+  background: rgba(255,255,255,0.75);
+  z-index: 9999;
+}
+
+.to-top button {
+	background-color: #513b56;
+}
+
+.to-top i {
+	color: #fff;
+}
+
+/** Container **/
+.container {
+	width: 80%;
+	height: auto;
+	margin: 50px auto;
+	padding: 50px;
+	position: relative;
+	line-height: 20px;
+	font-size: 14pt;
+	top: 20px;
+	border-left: 1px solid #513b56;
+	border-right: 1px solid #513b56;
+	-moz-box-shadow: 4px 0px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 4px 0px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+	box-shadow: 4px 0px rgba(0, 0, 0, 0.2), 0 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #348aa7;
+	font-family: Georgia;
+}
+
+b, i , u {
+	color: #348aa7;
+}
+
+::-moz-selection {
+    color: #513b56;
+    background: #fdff9e;
+}
+
+::selection {
+    color: #513b56;
+    background: #fdff9e;
+}
+
+a:visited, a:active {
+	color: #348aa7;
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+p {
+	line-height: 2.4rem;
+	line-height: 24px;
+	font-size: 12pt;
+	font-size: 1.2rem;
+	font-family: Tahoma;
+}
+
+hr { 
+	height: 10px;
+	border: 0;
+	box-shadow: 0 10px 10px -10px #5dd39e inset;
+	margin-top: 10px;
+}
+
+/** Tables **/
+table {
+   border-collapse: collapse;
+   border-spacing: 0;
+   margin: 0 0 1.5em;
+   width: 100%;
+}
+th {
+   font-weight: bold;
+}
+th, td {
+   border: 2px solid #f2f2f2;
+   padding: 6px 10px;
+}
+caption, th, td {
+   text-align: left;
+}
+
+/** Forms **/
+form {
+	margin: 0 auto;
+	padding: 5px;
+}
+
+input, textarea {
+   -webkit-border-radius: 5px;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="email"],
+input[type="search"],
+input[type="password"],
+textarea {
+   -moz-appearance: none !important;
+   -webkit-appearance: none !important;
+   appearance: none !important;
+   padding: 2%;
+   border: 1px solid #f2f2f2;
+   line-height: 20px;
+   width: 70%;
+   margin: 0 auto;
+   background-color: #fff;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+   display:block;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+   border: 1px solid #eaeaea;
+}
+
+input[type="reset"],
+input[type="button"],
+input[type="submit"],
+button {
+   -moz-appearance: none !important;
+   -webkit-appearance: none !important;
+   appearance: none !important;
+   color: #FFFFFF;
+   margin-bottom: 10px;
+   padding: 5px 25px;
+   cursor: pointer;
+   background-color: #348aa7;
+   border: 0px;
+   -webkit-border-radius: 3px;
+   -moz-border-radius: 3px;
+   border-radius: 3px;
+   font-size: 16px;
+}
+
+input[type="reset"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+button:hover {
+   -webkit-box-shadow:0 0 2px rgba(0, 0, 0, 0.6);
+   -moz-box-shadow:0 0 2px rgba(0, 0, 0, 0.6);
+   box-shadow:0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+button i {
+	color:#fff;
+}
+
+/** Dashboard Navigation **/
+#dashboard-nav {
+	position: relative;
+	margin-bottom: 50px;
+	padding: 0;
+	text-align: center;
+}
+
+#dashboard-nav ul {
+	display: inline-table;
+	table-layout: fixed;
+	padding: 0;
+	margin: auto;
+	width: 80%;
+}
+
+#dashboard-nav ul li{
+	display: table-cell;
+	width: auto;
+	margin: auto;
+	padding: 15px;
+	border: 1px solid #999;
+	color: inherit;
+	vertical-align: middle;
+	font-size: 1.2rem;
+	font-family: 'Century Gothic', Helvetica, sans-serif;
+}
+
+#dashboard-nav i {
+	padding: 5px;
+}
+
+#dashboard-nav .active a, #dashboard-nav .active i {
+	color: #000;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+/** Lasso tool **/
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.lasso path {
+  stroke: rgb(80,80,80);
+  stroke-width:2px;
+}
+
+.lasso .drawn {
+  fill-opacity:.05 ;
+}
+
+.lasso .loop_close {
+  fill:none;
+  stroke-dasharray: 4,4;
+}
+
+.lasso .origin {
+  fill:#3399FF;
+  fill-opacity:.5;
+}
+
+.not_possible {
+  fill:rgb(200,200,200);
+}
+
+.possible {
+  fill:#EC888C;
+}
+
+
+/** Footer **/
+#footer {
+	color: #173e43;
+	background-color: #fae596;
+	margin: 0;
+	padding: 15px 15px 3%;
+	width: 100%;
+	height: 200px;
+}

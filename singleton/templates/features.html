@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singleton by WEHI5</title>
+<link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+<script src="js/default.js" type="text/javascript"></script>
+<script src="js/temp.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="top"></div>
+
+<!-- Navigation Menu -->
+<div id="nav-menu" class = "nav-menu">
+	<ul>
+		<li id="logo"><a href="{{ request.application_url + '/'}}"><img src ="{{ request.static_url('singleton:static/img/logo.png')}}" width="100%" height="auto"></a></li>
+		<li class=""><a href="{{ request.application_url + '/'}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+		<li class="active"><a href="{{ request.application_url + '/features'}}"><i class="fa fa-star" aria-hidden="true"></i>Features</a></li>
+		<li class=""><a href="{{ request.application_url + '/about'}}"><i class="fa fa-info" aria-hidden="true"></i>About</a></li>
+		<li class=""><a href="{{ request.application_url + '/contact'}}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact</a></li>
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url}}/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+    {% else %}
+		<li class=""><a href="{{ request.application_url }}/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Login/Signup</a></li>
+    {% endif %}
+	</ul>
+</div>
+<!-- Navigation Menu END -->
+
+<!-- Scroll to top -->
+<div class = "to-top">
+<button onclick="scrollToTop(1000);"><i class="fa fa-angle-up"></i></button>
+</div>
+<!-- Scroll to top END -->
+
+<!-- Content -->
+
+<div id="content" class="container">
+
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url }}/dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i>You are logged in, enter Dashboard »</a></li>
+    {% endif %}
+
+<h1>Features</h1>
+
+    <hr>
+
+<h3 id="upload">Upload</h3>
+<p>Singleton accepts raw data of single cell expressions in either HDF5 (Hierarchical Data Format 5) or CSV (Comma Separated Values) file formats.
+It is assumed that the raw sequence data has already been processed, summarised and normalised.
+In addition, an option to share with a group is available to gain access the data for collaboration by either invitation through email, or by sharing a link.</p>
+
+<h3 id="analyse">Analyse</h3>
+<p>t-distributed Stochastic Neighbour Embedding (t-SNE) clustering is a technique for reducing dimensions to process the uploaded data.
+It is useful to differentiate heterogeneous populations of genes in a single cell.</p>
+
+<h3 id="visualise">Visualise</h3>
+<p>A gene expression heatmap and a multidimensional scaling (MDS) scatterplot are produced from t-SNE clustering.
+With a heatmap, gene expressions of single cells are easily distinguished. In a scatterplot, a lasso tool is embedded to the D3 library to compare two different clusters.
+A table of gene expressions are also produced to identify which group a sample belongs to.
+</p>
+
+<h3 id="export">Export</h3>
+<p>After the analysis of data, heatmaps and scatterplots can be saved in PNG (Portable Network Graphics) files.
+Tables generated from the analysis can also be saved in the CSV format. For future reference, the system automatically saves the analysis on the server.
+</p>
+
+</div>
+<!-- Content END -->
+
+<!-- Footer -->
+<div id ="footer">
+  <center><p>&copy; WEHI5 2016</p>
+  <p><i>This is a project of Web Information Technologies of year 2016 at University of Melbourne.</i></p>
+  <p>Affiliations: <img src="{{ request.static_url('singleton:static/img/wehi.png')}}" width="250px"><img src="{{ request.static_url('singleton:static/img/uom.png')}}" width="250px"></p>
+  </center>
+ </div>
+<!-- Footer END -->
+
+</body>
+</html>

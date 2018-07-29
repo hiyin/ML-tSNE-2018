@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEHI5 Prototype</title>
+
+<link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+<div style="background-image: url('{{ request.static_url('singleton:static/img/cell.jpg')}}'); top: 0px; left: 0px; margin: 0px; background-color: rgba(255,255,255,0.5); z-index: 10; background-size: cover; background-position: center center; width: 100%;">
+<div style="margin: 0px auto; padding: 2%; width: 50%; border-radius: 25px; border: 1px solid #333; -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75); box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.65); background-color: rgba(255,255,255,0.9); z-index:20;overflow: auto;">
+<center><img style ="margin-bottom:15px;" src="{{ request.static_url('singleton:static/img/logo.png')}}"/>
+<form action="{{ url }}" method="POST" name="registerform" >
+<h2>Registration Form</h2>
+<span>{{ message if message != None }}</span>
+<br>
+	First Name: <input type="text" id="first_name" name="first_name" placeholder="Required"><br/>
+	Last Name: <input type="text" id="last_name" name="last_name" placeholder="Optional"/><br/>
+    Email: <input type="email" id="email_address" name="email_address" placeholder="Required"/><br/>
+	Confirm Email: <input type="email" id="conf_email_address" placeholder="Required"/><br/>
+    Password: <input type="password" id="password" name="password" placeholder="Required"/><br/>
+	Confirm Password: <input type="password" id="conf_password" placeholder="Required"/><br/>
+	Secret Question: <select name="secret_question" style="width:70%";>
+		<option disabled selected>Required</option>
+		<option value="In what city are you born">In what city are you born?</option>
+		<option value="What is your mothers maiden name">What is your mothers maiden name?</option>
+		<option value="What is your childhood nickname">What was your childhood nickname?</option>
+		<option value="What is your favourite childhood character">What is the name of your favourite childhood friend?</option>
+		<option value="What was your first job">Where was your first job?</option>
+	</select><br/>
+	Secret Answer<input type="text" id="secret_answer" name="secret_answer" placeholder="Required"/><br/>
+    Organisation:<input type="text" id="organisation" name="organisation" placeholder="Optional"/><br/>
+	Sector: <select id="sector"> <!--These need to be populated from the database -->
+		<option disabled selected>Optional</option>
+		<option value="1">Higher Education Teaching/Learning</option>
+		<option value="2">Not for Profit Research</option>
+		<option value="3">Higher Education Research</option>
+		<option value="4">Hospital/Clinical Use</option>
+		<option value="5">Commercial</option>
+		<option value="6">Other</option>
+    <option value="">Prefer Not to Say</option>
+	</select><br/>
+    <input type="radio" id="gender" name="gender" value="male"/>Male  <input type="radio" id="gender" name="gender" value="female"/>Female (Optional)<br/>
+	Date of Birth: <input type="date" id="date_of_birth" name="date_of_birth"/> (Optional)
+  <br/><br/>
+  <button type="submit">Register</button>
+  <br/><br/>
+</form>
+</center>
+</div>
+</div>
+
+
+</body>
+</html>

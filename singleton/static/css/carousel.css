@@ -1,0 +1,136 @@
+#car-wrap {
+  width: 100%;
+  height: auto;
+  margin: 0px;
+  position: inherit;
+  background: #222;
+}
+
+#carousel {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  width: 100%;
+  min-width: 1280px;
+  min-height: 576px;
+}
+
+.car-nav {
+  position: absolute;
+  z-index: 999;
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 15px 0 0;
+  background: #fff;
+  cursor: pointer;
+  opacity: 0.25;
+  font-size: 32pt;
+  text-align: center;
+  vertical-align: middle;
+  color: #ccc;
+  box-shadow: 1px #000;
+}
+
+.car-nav:hover {
+  opacity: 1;
+  color: #513b56;
+}
+
+.nav-left {
+  left: 5px;
+  top: 45%;
+}
+
+.nav-right {
+  right: 5px;
+  top: 45%;
+}
+
+#car-slides {
+  list-style-type: none;
+  padding: 0;
+}
+
+.car-slide {
+  position: absolute;
+  left: 0px;
+  right:0px;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+  width: 640px;
+  height: 480px;
+  transition-property: all;
+  transition-duration: 0.5s;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  opacity:0.5;
+}
+
+.car-slide.active{
+  outline: 0;
+  opacity: 1 !important;
+}
+
+.car-img-frame {
+  margin: 0;
+  position: absolute;
+}
+
+.car-img-frame img {
+  width: 640px;
+  height: 480px;
+}
+
+.car-img-info {
+	position: absolute;
+    bottom: 0px;
+	width: 640px;
+    border: 0.5px solid #111;
+    background: #fff;
+    z-index: 9999;
+    background: #5dd39e;
+    line-height: 25px;
+}
+
+.car-img-info h2 {
+  font-family: sans-serif, Century Gothic;
+  color: #fff;
+  float:left;
+  display:inline;
+  text-transform: uppercase;
+}
+
+.car-img-info h3 {
+  font-family: courier, monospace;
+  color: #348aa7;
+  float: right;
+  display:inline;
+}
+
+#car-nav-pos {
+  position: absolute;
+  display: block;
+  margin: auto 0;
+  list-style-type: none;
+  padding: 0;
+}
+
+#car-nav-pos li {
+  float: left;
+  margin: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 75%;
+  background: #ffffcc;
+  cursor: pointer;
+  box-shadow: 0 1px 0 0 #111;
+}
+
+#car-nav-pos li.active {
+  background: #348aa7;
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singleton by WEHI5</title>
+<link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+
+<script src="js/default.js" type="text/javascript"></script>
+<script src="js/temp.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="top"></div>
+
+<!-- Navigation Menu -->
+<div id="nav-menu" class = "nav-menu">
+	<ul>
+		<li id="logo"><a href="{{ request.application_url + '/'}}"><img src ="{{ request.static_url('singleton:static/img/logo.png')}}" width="100%" height="auto"></a></li>
+		<li class=""><a href="{{ request.application_url + '/'}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+		<li class=""><a href="{{ request.application_url + '/features'}}"><i class="fa fa-star" aria-hidden="true"></i>Features</a></li>
+		<li class=""><a href="{{ request.application_url + '/about'}}"><i class="fa fa-info" aria-hidden="true"></i>About</a></li>
+		<li class="active"><a href="{{ request.application_url + '/contact'}}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact</a></li>
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url}}/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+    {% else %}
+		<li class=""><a href="{{ request.application_url }}/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Login/Signup</a></li>
+    {% endif %}
+	</ul>
+</div>
+<!-- Navigation Menu END -->
+
+<!-- Scroll to top -->
+<div class = "to-top">
+<button onclick="scrollToTop(1000);"><i class="fa fa-angle-up"></i></button>
+</div>
+<!-- Scroll to top END -->
+
+<!-- Content -->
+<div id="content" class="container">
+
+    {% if request.session.user is defined %}
+		<li class=""><a href="{{ request.application_url }}/dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i>You are logged in, enter Dashboard »</a></li>
+    {% endif %}
+
+<h1>Contact</h1>
+
+    <hr>
+
+<h3>Angela Yin</h3>
+
+<h3>Evan Bailey</h3>
+
+<h3>Joshua Musolino</h3>
+
+<h3>Kimberley Chong</h3>
+
+<h3>Liam Stephenson</h3>
+
+<h3>Yoshua Wakeham</h3>
+
+<hr>
+
+<h3>Jarny Choi</h3>
+
+
+</div>
+<!-- Content END-->
+
+<!-- Footer -->
+<div id ="footer">
+  <center><p>&copy; WEHI5 2016</p>
+  <p><i>This is a project of Web Information Technologies of year 2016 at University of Melbourne.</i></p>
+  <p>Affiliations: <img src="{{ request.static_url('singleton:static/img/wehi.png')}}" width="250px"><img src="{{ request.static_url('singleton:static/img/uom.png')}}" width="250px"></p>
+  </center>
+ </div>
+<!-- Footer END -->
+
+</body>
+</html>

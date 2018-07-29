@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html ng-app="singleton">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Singleton by WEHI5</title>
+
+    <link href="{{ request.static_url('singleton:static/css/load_icon.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ request.static_url('singleton:static/css/default.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ request.static_url('singleton:static/css/analysis_page.css') }}" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <script src="{{ request.static_url('singleton:static/js/angular.js') }}"></script>
+    <script src="{{ request.static_url('singleton:static/js/app.js') }}"></script>
+    <script src="{{ request.static_url('singleton:static/js/controllers.js') }}"></script>
+
+    <!--Visualisation and analysis-->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="{{ request.static_url('singleton:static/js/tsne.js') }}"></script>
+    <script src="{{ request.static_url('singleton:static/js/scatterplot.js') }}"></script>
+    <script src="{{ request.static_url('singleton:static/js/lasso.js') }}"></script>
+    <script src="{{ request.static_url('singleton:static/js/default.js') }}" type="text/javascript"></script>
+
+    <!--Heatmap-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/modules/offline-exporting.js"></script>
+
+    <!--CANVG-->
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
+
+    <!--Load data received from server into relevant angularjs controller-->
+    <script>
+        // Probably not the most elegant way to set the variables but it works for now
+        window.onload = function () {
+            var scope = angular.element(document.getElementById('ctrl')).scope();
+            scope.$apply(scope.init( {{ data }}, {{ labels | safe }}, {{ samples | safe }} ));
+        }
+    </script>
+</head>
+
+<body id="ctrl" ng-controller="analysisCtrl">
+<div id="top"></div>
+
+<!-- Navigation Menu -->
+<div id="nav-menu" class = "nav-menu">
+	<ul>
+		<li id="logo"><a href="{{ request.application_url + '/'}}"><img src ="{{ request.static_url('singleton:static/img/logo.png')}}" width="100%" height="auto"></a></li>
+		<li class=""><a href="{{ request.application_url + '/'}}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+		<li class=""><a href="{{ request.application_url + '/features'}}"><i class="fa fa-star" aria-hidden="true"></i>Features</a></li>
+		<li class=""><a href="{{ request.application_url + '/about'}}"><i class="fa fa-info" aria-hidden="true"></i>About</a></li>
+		<li class=""><a href="{{ request.application_url + '/contact'}}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact</a></li>
+		<li class=""><a href="{{ request.application_url + '/logout'}}"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+	</ul>
+</div>
+<!-- Navigation Menu END -->
+
+
+<!-- Scroll to top -->
+<div class = "to-top">
+<button onclick="scrollToTop(1000);"><i class="fa fa-angle-up"></i></button>
+</div>
+<!-- Scroll to top END -->
+
+
+<!--Content -->
+<div id="content" class="container">
+
+
+<!-- Dashboard Navigation -->
+<div id="dashboard-nav">
+<ul>
+	<li class=""><a href="{{ request.application_url + '/dashboard'}}"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
+	<li><a href="{{ request.application_url + '/upload'}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Dataset</a></li>
+	<li class="active"><a href="{{ request.application_url + '/new'}}"><i class="fa fa-plus" aria-hidden="true"></i>New Analysis</a></li>
+</ul>
+</div>
+<!-- Dashboard Navigation END-->
+
+
+
+<h2>Start new analysis</h2>
+
+<hr/>
+
+<h3>Analysis</h3>
+
+<!-- Analysis Options -->
+<div style="margin-left:40px; margin-right:40px;">
+    <table class="option-table" width="100%">
+        <tr>
+            <td><label>Learning Rate: <input type="text" ng-model="tsneLearningRate"></label></td>
+            <td><label>Perplexity: <input type="text" ng-model="tsnePerplexity"></label></td>
+            <td><label>Max Iteration: <input type="text" ng-model="tsneMaxIteration"></label></td>
+        </tr>
+        <tr>
+            <td>
+                <button ng-click="plot()">Start T-SNE</button>
+                <button ng-click="stopTsne()">Stop T-SNE</button>
+                <button ng-click="executeTsne()">Continue T-SNE</button>
+                <button ng-click="singleStep()">Single Iteration</button>
+            </td>
+            <td style="align-items: center;">
+                <button ng-click="clearLasso()">Clear Lasso Selection</button>
+                <button ng-click="lassoAnalysis()">Request Lasso Analysis</button>
+                <div ng-show="loading" class="spinner"></div>
+            </td>
+            <td>
+                <button ng-click="toggleLabels()">Toggle Labels</button>
+                <button ng-click="toggleLasso()">{[ action ]}</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Scatterplot -->
+    <div ng-show="plotted">
+        <h4>T-SNE Scatterplot</h4>
+
+        <h5>{[ tsneInfoDisplay ]}</h5>
+        <br>
+        <svg xmlns="http://www.w3.org/2000/svg" id="mainSvg" width="900" height="500"></svg>
+        <!-- Convert svg to canvas, allowing scatterplot to be downloaded as a png file -->
+        <div ng-show=false><canvas id="canvas" width="800" height="500"></canvas></div>
+    </div>
+<!-- Scatterplot END-->
+
+
+<!-- Gene Expression Average -->
+    <div ng-show="analysing">
+        <h4>Gene Expression Average Table</h4>
+        <label>Number of results to display: <input type="text" ng-model="averageList" ng-pattern="/^\d+$/" /></label>
+        <table class="ng-repeat-table" style="border:1px solid #000; font-family: sans-serif;font-size: 12pt;">
+            <thead>
+                <tr>
+                    <th>Gene</th>
+                    <th>Average</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="data in averageData | limitTo:(averageList || 1)">
+                <tr>
+                    <td>{[ data['gene'] ]}</td>
+                    <td>{[ data['average'] ]}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<!-- Gene Expression Average END -->
+
+<!-- Heatmap -->
+    <div ng-show="analysing">
+        <h4>Heatmap</h4>
+        <label>Number of genes to display: <input type="text" ng-model="heatList" ng-pattern="/^\d+$/"></label>
+        <button ng-click="setHeatMap()">Reload Heatmap</button>
+        <div id="heatmap" style="max-width: 450px; display: table-cell; vertical-align: middle;"></div>
+    </div>
+<!-- Heatmap END -->
+
+
+<!-- Gene Expression Table -->
+    <div ng-show="analysing">
+        <h4>Gene Expression Table</h4>
+        <div id = "datatable">
+            <label>Number of genes to display: <input type="text" ng-model="geneList" ng-pattern="/^\d+$/"></label>
+            <table class="ng-repeat-table" style="border:1px solid #000; font-family: sans-serif;font-size: 12pt;">
+                <thead>
+                    <tr>
+                        <th>Sample ID</th>
+                        <th rowSpan="{[ $scope.geneList || 1 ]}">Gene</th>
+                        <th>Group</th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="(sampleID, geneExpressions) in tableData track by sampleID">
+                    <tr ng-repeat="sample in data | filter:sampleID track by sample.name">
+                        <td>{[ sample['name'] ]}</td>
+                        <td class="table-container">
+                            <table class="nested-table">
+                                <tbody>
+                                    <tr ng-repeat="ave in averageData | limitTo:(geneList || 1)">
+                                        <td>{[ ave['gene'] ]}</td>
+                                        <td>{[ geneExpressions[ave['gene']] ]}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>{[ sample['group'] ]}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<!-- Gene Expression Table END -->
+
+
+
+<hr/>
+
+<div ng-show="plotted">
+<h4>Export</h4>
+	Choose visualisation: <br/>
+	<table style="border: 0px; margin: 10px;">
+        <tr>
+            <td style="width: 75%;">Image of MDS Scatterplot (<i>.png</i>)</td>
+            <td style="width: 25%;"><button ng-click="downloadScatterplot({{ dataset_name }})">Download</button></td>
+        </tr>
+        <tr ng-show="analysing">
+            <td style="width: 75%;">Table of Gene Expression (<i>.csv</i>)</td>
+            <td style="width: 25%;"><button ng-click="exportGeneExpressions({{ dataset_name }})">Download</button></td>
+        </tr>
+	<!--<tr>-->
+		<!--<td>Image of MDS Scatterplot (<i>.png</i>)</td> <td><input id="export" type="checkbox" value="scatterplot"/></td>-->
+	<!--</tr>-->
+	<!--<tr>-->
+		<!--<td>Image of Heatmap (<i>.png</i>)</td> <td><input id="export" type="checkbox" value="heatmap"/></td>-->
+	<!--</tr>-->
+	<!--<tr>-->
+		<!--<td>Table of Gene Expression (<i>.csv</i>)</td> <td><input id="export" type="checkbox" value="table"/></td>-->
+	<!--</tr>-->
+	</table>
+	<br/>
+	<!--Save: <br/>-->
+	<!--<p style="margin: 10px;font-family:inherit;">Save on server? <input name="save" type="radio" value="Yes"/>Yes <input name="save" type="radio" value="No"/>No <br/>-->
+	<!--<button><i class="fa fa-floppy-o" aria-hidden="true"></i> Save on your computer now</button>-->
+	<!--</p>-->
+	<!--Publish:-->
+	<!--<p style="margin: 10px;font-family:inherit;">Allow data for public use? <input name="publish" type="radio" value="Yes"/>Yes <input name="publish" type="radio" value="No"/>No-->
+	<!--</p>-->
+<!--</form>-->
+<br/>
+<!--<button><i class="fa fa-check" aria-hidden="true"></i> Finish analysis</button>-->
+</div>
+
+</div>
+<!-- Content END-->
+
+<!-- Footer -->
+<div id ="footer">
+  <center><p>&copy; WEHI5 2016</p>
+  <p><i>This is a project of Web Information Technologies of year 2016 at University of Melbourne.</i></p>
+  <p>Affiliations: <img src="{{ request.static_url('singleton:static/img/wehi.png')}}" width="250px"><img src="{{ request.static_url('singleton:static/img/uom.png')}}" width="250px"></p>
+  </center>
+ </div>
+<!-- Footer END -->
+
+</body>
+</html>
